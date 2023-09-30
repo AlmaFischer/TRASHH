@@ -3,10 +3,15 @@
 #include <ctime>
 #include <iostream>
 
+#include <vector>
+#include <stack>
+#include <queue>
+
 namespace maze{
 
-const unsigned char Maze::WALL  = '@';
+const unsigned char Maze::WALL  = 'X';
 const unsigned char Maze::EMPTY = '-';
+const unsigned char Maze::VISITED = 'O';
 const int Maze::NORTH= 0;
 const int Maze::SOUTH= 1;
 const int Maze::EAST= 2;
@@ -15,10 +20,10 @@ Maze::Maze(int h, int w):
 		height(h),
 		width(w),
 		grid(nullptr){
-	dir[0] = NORTH;
-	dir[1] = SOUTH;
-	dir[2] = EAST;
-	dir[3] = WEST;
+	dir[0] = NORTH; //1
+	dir[1] = SOUTH; //2
+	dir[2] = EAST;  //3
+	dir[3] = WEST;  //4
 	std::srand(time(0));
 	generate_maze(h, w);
 
@@ -114,8 +119,9 @@ void Maze::print(){
 		for (int j = 0; j < width; j++){
 			if (grid[i][j] == 0) {
 				std::cout << EMPTY;
-			}
-			else {
+			}else if(grid[i][j]==-1){//modificado
+				std::cout << VISITED;
+			}else if(grid[i][j]==1){
 				std::cout << WALL;
 			}
 		}
@@ -129,5 +135,74 @@ void Maze::print(){
 	std::cout << " ";
 	std::cout << std::endl;
 }
+std::vector<std::pair<int, int>> Maze::solve_s(int f1, int c1, int f2, int c2) {
+    std::vector<std::pair<int, int>> Possible_path;
+    if (!inRange(f1, c1) || !inRange(f2, c2)) {
+        std::cout << "Coordenadas no estan en laberinto" << std::endl;
+        return Possible_path;
+    }
+
+    std::stack<std::pair<int, int>> stack;
+    stack.push(std::make_pair(f1, c1));
+
+    while (!stack.empty()) {
+        int i = stack.top().first;
+        int j = stack.top().second;
+
+        if (i == f2 && j == c2) {
+            // Found the destination, reconstruct the path
+            while (!stack.empty()) {
+                Possible_path.push_back(stack.top());
+                stack.pop();
+            }
+            //std::reverse(Possible_path.begin(), Possible_path.end()); // Reverse to get the correct order
+            return Possible_path;
+        }
+
+        bool moved = false;
+        shuffle_dir();
+
+        for (int k = 0; k < 4; k++) {
+            int dx = 0;
+            int dy = 0;
+
+            if (dir[k] == NORTH) {
+                dy = -1;
+                dx = 0;
+            } else if (dir[k] == SOUTH) {
+                dy = 1;
+                dx = 0;
+            } else if (dir[k] == EAST) {
+                dy = 0;
+                dx = 1;
+            } else if (dir[k] == WEST) {
+                dy = 0;
+                dx = -1;
+            }
+
+            int i_next = i + dy;
+            int j_next = j + dx;
+
+            if (inRange(i_next, j_next) && grid[i_next][j_next] == 0) {
+				std::cout<<"IN"<<dir[k]<<std::endl;
+                stack.push(std::make_pair(i_next, j_next));
+                moved = true;
+                grid[i_next][j_next] = Maze::VISITED; // Mark the cell as visited
+				std::cout<<stack.top().first<<","<<stack.top().second<<std::endl;
+                break;
+            }else{std::cout<<"OUT"<<dir[k]<<std::endl;}
+        }
+		std::cout<<std::endl;
+
+        if (!moved) {
+            // If no valid move is possible, backtrack
+            stack.pop();
+        }
+    }
+
+    // If no path is found, Possible_path will be empty
+    return Possible_path;
+}
+
 
 }

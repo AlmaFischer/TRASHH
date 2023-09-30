@@ -1,0 +1,3 @@
+/home/alan/Desktop/eda_cpp/laberinto/build-dir/CMakeFiles/test.dir
+/home/alan/Desktop/eda_cpp/laberinto/build-dir/CMakeFiles/edit_cache.dir
+/home/alan/Desktop/eda_cpp/laberinto/build-dir/CMakeFiles/rebuild_cache.dir
