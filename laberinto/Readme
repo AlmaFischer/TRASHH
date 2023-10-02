@@ -1,0 +1,31 @@
+
+Prerquisistos necesarios para el sistema:
+
+    C++ compiler (e.g., g++)
+    CMake (for building the project)
+
+Compilación.
+
+Cambiar el directorio de trabajo a la carpeta "Laberinto":
+
+	cd Laberinto
+
+crea una carpeta llamada build:
+
+	mkdir build
+	cd build
+
+crea el build con cmake:
+
+	cmake ..
+
+Crear el ejecutable; dentro de la carpeta test esta el archivo test.cpp desde el cual se crea el ejecutable:
+
+	make
+
+Uso:
+
+Una vez creado el ejecutable
+
+./test
+

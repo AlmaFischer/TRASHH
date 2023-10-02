@@ -1,8 +1,8 @@
 /**
  * Classe Maze
  */
-#include <vector>
-
+#include <stack>
+#include <queue>
 namespace maze {
 	typedef unsigned char uchar;
 
@@ -29,7 +29,10 @@ namespace maze {
 		void reset_maze(int h, int w);
 		bool inRange(int i, int j);
 		void print();
-		std::vector<std::pair<int,int>> solve_s(int f1,int c1,int f2,int c2); //Solver con pila
+		std::stack<std::pair<int, int>> solve_s(int f1,int c1,int f2,int c2); //Solver con pila
+		void printPaths(const std::stack<std::pair<int, int>>& path);
+		std::queue<std::pair<int, int>> solve_q(int f1, int c1, int f2, int c2);
+		void printPathq(const std::queue<std::pair<int, int>>& pathQueue);
 
 
 	};
